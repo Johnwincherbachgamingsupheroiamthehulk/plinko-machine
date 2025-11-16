@@ -8,7 +8,7 @@
 }
 
 body {
-    background-color: rgb(221, 221, 221);
+    background-color: rgb(24, 43, 61);
 }
 
 .peg {
@@ -16,4 +16,59 @@ body {
     height: 20px;
     border-radius: 50%;
     background: white;
+}
+
+.bounceanim {
+    transform: translateY(0);
+    transition: transform 0.2s;
+}
+
+#gui {
+    background-color: rgb(42, 56, 70);
+    width: 500px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    gap: 20px;
+    left: 10px;
+    text-align: center;
+    padding-top: 100px;
+    padding-left: 120px;
+}
+#dropballbtn {
+    width: 350px;
+    height: 75px;
+    background-color: #00ff37;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: bold;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    border-color: black;
+    transition: transform 0.1s ease-in-out;
+}
+
+#dropballbtn:hover {
+    transform: scale(1.05);
+}
+
+#dropballbtn:active {
+    transform: scale(0.98);
+    transition: transform 0.1 ease-in-out;
+}
+
+#money {
+    background-color: #112233ff;
+    height: 75px;
+    width: 350px;
+    font-size: 100%;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#moneyinpt {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size : 100%;
+    color: white;
+    background-color: #112233ff;
 }

@@ -1,5 +1,4 @@
 const clicksound = new Audio("sounds/mixkit-modern-click-box-check-1120.wav");
-const zonesound = new Audio("sounds/soft-kalimba-one-note_C.wav");
 
 // create matter engine, render, world, bodies for physics engine
 const Engine = Matter.Engine,
@@ -17,29 +16,37 @@ const render = Render.create({
         width: 1000,
         height: 1100,
         wireframes: false,
-        background: "#112233ff"
+        background: "#112233ff",
     }
 });
 
+Render.run(render);
 
 let playerMoney = 1; // set player money 
-
-
 
 const boardWidth = 1000;
 const boardHeight = 1200;
 
+const container = document.getElementById("plinko-area");
+const canvas = container.querySelector("canvas");
+const scaleX = canvas.clientWidth / boardWidth;
+const scaleY = canvas.clientHeight / boardHeight;
+
+
+
 // set up multipliers for payouts :money:
-const multipliers = [0.5, 0.8, 1, 1.2, 1.5, 2, 5, 10, 5, 2, 1.5, 1.2, 1, 0.8, 0.5];
+const multipliers = [0, 0.25, 0.5, 0.7, 0.8, 1, 1.2, 1.5, 1.6, 100, 1.6, 1.5, 1.2, 1, 0.8, 0.7, 0.5, 0.25, 0];
 const numofmultipliers = multipliers.length;
 const multiplierwidth = boardWidth / numofmultipliers;
 const multiplierheight = 60;
 
 // creating zones 
+
+
 for (let index = 0; index < numofmultipliers; index++) {
     const x = multiplierwidth / 2 + multiplierwidth * index;
-    const y = boardHeight - multiplierheight * 3;
-
+    const y = boardHeight - multiplierheight * 4;
+    const y2 = boardHeight - multiplierheight * 4 + 100;
     const zone = Bodies.rectangle(
         x,
         y,
@@ -49,14 +56,16 @@ for (let index = 0; index < numofmultipliers; index++) {
             isStatic: true,
             label: "zone",
             multiplier: multipliers[index],
-            render: { visible : false},
+            render: { fillStyle: "#ffffff00" },
             multiplierIndex: index
         }
     );
-
     World.add(world, zone);
 
-    // adding text to zones to display their respective text 
+    const xLabel = x * scaleX - (multiplierwidth * scaleX) / 2;
+    const yLabel = y2 * scaleY - (multiplierheight * scaleY) /2 ;
+    const labelWidth = multiplierwidth * scaleX;
+    const labelHeight = multiplierheight * scaleY;
 
     const label = document.createElement("div");
     label.innerText = `${multipliers[index]}x`;
@@ -64,10 +73,10 @@ for (let index = 0; index < numofmultipliers; index++) {
     label.classList.add("bounceanim");
     label.style.fontFamily = "Brush Script MT, cursive";
     label.style.position = "absolute";
-    label.style.left = `${x - multiplierwidth / 2}px`;
-    label.style.top = `${y - multiplierheight / 2}px`;
-    label.style.width = "58px";
-    label.style.height = `${multiplierheight}px`;
+    label.style.left = `${xLabel}px`;
+    label.style.top = `${yLabel}px`;
+    label.style.width = `${labelWidth}px`;
+    label.style.height = `${labelHeight}px`;
     label.style.color = "black";
     label.style.display = "flex";
     label.style.alignItems = "center";
@@ -75,24 +84,29 @@ for (let index = 0; index < numofmultipliers; index++) {
     label.style.fontWeight = "bold";
     label.style.backgroundColor = "red";
     label.style.borderRadius = "10px";
-    label.style.border = "2px solid black"; 
-    document.getElementById("plinko-area").appendChild(label);
+    label.style.border = "2px solid black";
+    container.appendChild(label);
+
+
 
 
     /* coloring depending on multiplier */
-    if (multipliers[index] == 10) {
+    if (multipliers[index] == 100) {
         label.style.backgroundColor = "#ffef5eff";
-    } else if (multipliers[index] == 5) {
+    } else if (multipliers[index] == 1.6) {
         label.style.backgroundColor = "#ffc830ff";
-    } else if (multipliers[index] == 2) {
-        label.style.backgroundColor = "#ffa724ff";
     } else if (multipliers[index] == 1.5) {
+        label.style.backgroundColor = "#ffa724ff";
+    } else if (multipliers[index] <= 1.2 && multipliers[index] >= 1) {
         label.style.backgroundColor = "#fc8414ff";
-    } else if (multipliers[index] == 1.2) {
+    } else if (multipliers[index] <= 0.8 && multipliers[index] >= 0.7) {
         label.style.backgroundColor = "#ff5e00ff";
-    } else if (multipliers[index] == 1) {
+    } else if (multipliers[index] <= 0.25 && multipliers[index] >= 0) {
+        label.style.backgroundColor = "#ff0000ff";
+    } else {
         label.style.backgroundColor = "#ff3c00ff";
     }
+
 }
 
 engine.world.gravity.y = 0.2; // higher = stronger, lower = very spacey and cool
@@ -139,12 +153,10 @@ dropBallBtn.addEventListener("click", () => {
     // uhh checking stuff so it dont break
     let betAmount = parseFloat(document.getElementById("moneyinpt").value);
     if (isNaN(betAmount) || betAmount <= 0) {
-        alert("enter a VALID bet amount :$ !!!")
         return;
     }
 
     if (betAmount > playerMoney) {
-        alert("Not enough money :( !!");
         return;
     }
 
@@ -209,27 +221,24 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
             World.remove(world, ball);
             
 
+            // "bounce" animation when ball touches a zone
 
             const label = document.querySelector(`#plinko-area div[data-index='${zone.multiplierIndex}']`);
             if (label) {
-                label.style.transform = "translateY(10px)";
+                label.style.transform = "translateY(20px)"; // how much pixels it goes down
 
                 setTimeout(() => {
                     label.style.transform = "translateY(0)";
-                }, 200);
+                }, 100);
             }
         }
     })
 })
 
 
+
 // run the engine so it displays the game
 Engine.run(engine);
-Render.run(render);
-
-
-
-
 
 
 /* BORDERS TO PREVENT BALLS FROM ESCAPING!!!

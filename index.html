@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&display=swap" rel="stylesheet">
         <title>plinko machine</title>
         <link rel="stylesheet" href="amazingcss.css">
     </head>
 
     <body>
-        <div id="gui">
-            <input type="text" id="moneyinpt" name="insert how much you want to bet">
-            <button id="money">$1</button>
-            <button id="dropballbtn">Drop Ball</button>
-            
-            
+        <div id="topbar">
+            <p1 id="Title">Plinko</p1>
+            <div id="money">
+                $1 
+            </div>
+            <div id="moneyicon">
+                <b>$</b>
+            </div>
+
+        </div>
+        <div class="container">
+            <div id="side-bar">
+                <p1 class="moneytitle">Enter bet amount here ($)</p1>
+                <input type="text" id="moneyinpt" placeholder="...">
+                <button id="dropballbtn">Drop Ball</button>
+            </div>
+            <div id="plinko-area"></div>
         </div>
 
-        <div id="plinko-area"></div>
+
+        
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <script src="script.js"></script>
